@@ -18,18 +18,18 @@ public class MonsterAnimation extends Transition {
 
     public MonsterAnimation(String monster) {
         image = new ImageView();
-        last = 245;
+        last = 0;
 
         switch(monster) {
-            case "skeleton":
+            case "M1":
                 setSkeleton();
                 break;
 
-            case "spider":
+            case "M2":
                 setSpider();
                 break;
 
-            case "shrieker":
+            case "M3":
                 setShrieker();
                 break;
         }
