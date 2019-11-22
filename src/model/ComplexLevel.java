@@ -76,15 +76,7 @@ public class ComplexLevel extends Level {
             }
         }
     }
-
-    public ArrayList<Chamber> getChambers() {
-        return chambers;
-    }
-
-    public ArrayList<Passage> getPassages() {
-        return passages;
-    }
-
+    
     /** Print a level from it's start door. */
     @Override
     public void printFromDoor() {

@@ -17,8 +17,8 @@ public class Chamber extends Space {
     private ChamberContents contents;
     private ChamberShape shape;
     private ArrayList<Door> doors;
-    private Treasure treasure;
-    private Monster monster;
+    private ArrayList<Treasure> treasure;
+    private ArrayList<Monster> monsters;
     private Stairs stairs;
     private int width;
     private int length;
@@ -35,6 +35,9 @@ public class Chamber extends Space {
      */
     public Chamber(Door door) {
         doors = new ArrayList<>();
+        treasure = new ArrayList<>();    
+        monsters = new ArrayList<>();
+        
         contents = new ChamberContents();
         contents.chooseContents(Die.d20());
         shape = ChamberShape.selectChamberShape(Die.d20());
@@ -48,11 +51,11 @@ public class Chamber extends Space {
     /** Get the entrance to the Chamber.
      * @return A Door object representing the entrance to the Chamber.
      */
-    Door getStartDoor() {
+    protected Door getStartDoor() {
         return entrance;
     }
 
-    void parseContents() {
+    protected void parseContents() {
         StringBuilder desc = new StringBuilder();
 
         if (containsContent("monster")) {
@@ -68,7 +71,7 @@ public class Chamber extends Space {
         }
     }
 
-    void parseShape() {
+    protected void parseShape() {
         getShapeDimensions();
         area = shape.getArea();
         doors.clear();
@@ -89,7 +92,7 @@ public class Chamber extends Space {
         }
     }
 
-    private boolean containsContent(String item) {
+    protected boolean containsContent(String item) {
         return contents.getDescription().toLowerCase().contains(item);
     }
 
@@ -123,7 +126,7 @@ public class Chamber extends Space {
         return new ArrayList<>(doors);
     }
 
-    private void addStairs(Stairs newStairs) {
+    public void addStairs(Stairs newStairs) {
         stairs = newStairs;
         stairs.setType(Die.d20());
     }
@@ -142,50 +145,48 @@ public class Chamber extends Space {
         return stairs;
     }
 
-    private void addMonster(Monster newMonster) {
-        monster = newMonster;
-        monster.setType(Die.d20());
+    public void addMonster(Monster newMonster) {
+        monsters.add(newMonster);
     }
 
     /** Check if the Chamber has  a monster.
      * @return A boolean representing whether or not the Chamber has atleast one monster.
      */
     public boolean hasMonsters() {
-        return !(monster == null);
+        return (monsters.size() > 0);
     }
 
     /** Get the list of monsters in the Chamber.
      * @return The ArrayList of monsters in the Chamber.
      */
-    public Monster getMonster() {
-        return monster;
+    public ArrayList<Monster> getMonsters() {
+        return monsters;
     }
 
-    private void addTreasure(Treasure newTreasure) {
-        treasure = newTreasure;
-        treasure.chooseTreasure(Die.d20());
+    public void addTreasure(Treasure newTreasure) {
+        treasure.add(newTreasure);
     }
 
     /** Check if the Chamber has treasure.
      * @return A boolean value representing whether or not the Chamber has treasure.
      */
     public boolean hasTreasure() {
-        return !(treasure == null);
+        return (treasure.size() > 0);
     }
 
     /** Get the list of trasure in the Chamber.
      * @return The ArrayList of treasure in the Chamber
      */
-    public Treasure getTreasure() {
+    public ArrayList<Treasure> getTreasure() {
         return treasure;
     }
 
     /** Get a String representing the treasure's protection.
      * @return A String representing the treasure's protection
      */
-    public String getTreasureProtection() {
+    public String getTreasureProtection(int i) {
         try {
-            return treasure.getProtection();
+            return treasure.get(i).getProtection();
         } catch (NotProtectedException e) {
             return "none";
         }
@@ -200,30 +201,6 @@ public class Chamber extends Space {
         } else {
             return String.format("%dx%d", length, width);
         }
-    }
-
-    /** Get a description of the Chamber.
-     * @return A String representing a description of the Chamber
-     */
-    @Override
-    public String getDescription() {
-        StringBuilder desc = new StringBuilder();
-        String s;
-
-        desc.append(String.format("Chamber: %s, %s, Area: %d\n", shape.getShape(), getChamberDimensions(), area));
-        desc.append(String.format("Contents: %s\n", contents.getDescription()));
-
-        if (hasTreasure()) {
-            desc.append(String.format("Treasure:\n %s", treasure.getDescription()));
-            desc.append(String.format("\n  Protection: %s", getTreasureProtection()));
-            desc.append(String.format("\n  Container %s", treasure.getContainer()));
-        }
-
-        if (hasMonsters()) {
-            desc.append(String.format("Monster(s): %s (%d-%d)\n", monster.getDescription(), monster.getMinNum(), monster.getMaxNum()));
-        }
-
-        return desc.toString();
     }
 
     /** Get the number of doors in the Chamber.

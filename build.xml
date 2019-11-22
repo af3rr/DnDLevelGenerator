@@ -69,7 +69,7 @@
 
 
   <target name="doc" depends="init" description="generate documentation">
-    <javadoc  destdir="${doc}" classpath="lib/${libfile}">
+    <javadoc destdir="${doc}" classpath="lib/${libfile}">
       <fileset dir="${src}" casesensitive="yes" defaultexcludes="yes">
         <include name="**/*.java"/>
     </fileset>
@@ -125,15 +125,13 @@
    </java>  
   </target>
 
-  <target name="runJava" depends="copy,compile"
-        description="Run Jar file">
+  <target name="runJava" depends="copy,compile" description="Run Jar file">
    <java classpath="${build}:${javafxlib}" classname="${main_class}" fork="true">
     <classpath refid="libs.jars"/>
    </java>  
   </target>
   
-    <target name="testos"
-        description="Run Jar file">
+    <target name="testos" description="Run Jar file">
 		<echo if:set="isWindows"> Windows OS </echo>
 		<echo if:set="isLinux"> Linux  OS </echo>
 		<echo if:set="isMac"> Mac OS </echo>
