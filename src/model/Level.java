@@ -92,11 +92,11 @@ public abstract class Level {
      * @param depth The number of "|  "s to prepend
      */
     public static final void printTreasure(Chamber c, int depth) {
-        Treasure t = c.getTreasure();
+        Treasure t = c.getTreasure().get(0);
 
         println(indent1("Treasure:", depth));
         println(indent2(t.getDescription(), depth));
-        println(indent1(String.format("Protection: %s", c.getTreasureProtection()), depth + 1));
+        println(indent1(String.format("Protection: %s", c.getTreasureProtection(0)), depth + 1));
         println(indent1(String.format("Container %s", t.getContainer()), depth + 1));
     }
 
@@ -105,7 +105,7 @@ public abstract class Level {
      * @param depth The number of "|  "s to prepend
      */
     public static final void printMonsters(Chamber c, int depth) {
-        Monster m = c.getMonster();
+        Monster m = c.getMonsters().get(0);
 
         println(indent1("Monsters:", depth));
         println(indent2(String.format("%s (%d-%d)", m.getDescription(), m.getMinNum(), m.getMaxNum()), depth));

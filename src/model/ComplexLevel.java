@@ -5,12 +5,14 @@ import java.util.ArrayList;
 public class ComplexLevel extends Level {
     private Door startDoor;
     private ArrayList<Chamber> chambers;
+    private ArrayList<Passage> passages;
 
     /** Constructor for the ComplexLevel class. Sets the starting door.
      * @param door The starting door
      */
     public ComplexLevel(Door door) {
         chambers = new ArrayList<>();
+        passages = new ArrayList<>();
 
         setStartDoor(door);
     }
@@ -45,6 +47,7 @@ public class ComplexLevel extends Level {
 
         if (nextSpace == null) {
             passage.createPassage(door);
+            passages.add(passage);
 
             for (PassageSection section : passage.getSections()) {
                 if (section.hasDoor() && !section.getDoor().equals(startDoor)) {
@@ -72,6 +75,14 @@ public class ComplexLevel extends Level {
                 createFromDoor(forcedDoor, depth + 1);
             }
         }
+    }
+
+    public ArrayList<Chamber> getChambers() {
+        return chambers;
+    }
+
+    public ArrayList<Passage> getPassages() {
+        return passages;
     }
 
     /** Print a level from it's start door. */

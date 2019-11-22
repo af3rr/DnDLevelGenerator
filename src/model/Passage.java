@@ -197,7 +197,6 @@ public class Passage extends Space {
     /** Get a description of the space.
      * @return A String representing a description of the Space
      */
-    @Override
     public String getDescription() {
         StringBuilder description = new StringBuilder();
 
