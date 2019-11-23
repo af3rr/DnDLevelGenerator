@@ -233,7 +233,7 @@ public class SimpleLevel extends Level {
             d = new Door();
         }
 
-        p.getSection(1).addDoor(c.getStartDoor());
+        p.getSection(1).setDoor(c.getStartDoor());
         map.get(c).remove(d);
         c.removeDoor(d);
     }
@@ -248,11 +248,11 @@ public class SimpleLevel extends Level {
         p = new Passage();
 
         p.createShortPassage(d1);
-        p.getSection(1).addDoor(c2.getStartDoor());
+        p.getSection(1).setDoor(c2.getStartDoor());
         c2.getStartDoor().setSpaces(p, c2);
 
         p.createShortPassage(d2);
-        p.getSection(1).addDoor(c1.getStartDoor());
+        p.getSection(1).setDoor(c1.getStartDoor());
 
         map.get(c1).remove(d1);
         map.get(c2).remove(d2);
