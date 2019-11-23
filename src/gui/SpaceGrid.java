@@ -25,11 +25,13 @@ public class SpaceGrid {
 
         if (space instanceof DefaultChamber) {
             chamber = (DefaultChamber) space;
+            layout = chamber.getLayout();
+            
         } else if (space instanceof DefaultPassage) {
             passage = (DefaultPassage) space;
+            layout = passage.getLayout();
         }
 
-        layout = chamber.getLayout();
         width = layout.length;
         length = layout[0].length() / 2;
 
