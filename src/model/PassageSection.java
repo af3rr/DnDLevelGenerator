@@ -10,6 +10,7 @@ public class PassageSection {
     private Door door;
     private Monster monster;
     private Stairs stairs;
+    private boolean isDefault;
 
     /** Constructor for the PassageSection object.
      * @param roll Set the description for the passage (optional)
@@ -21,6 +22,17 @@ public class PassageSection {
             setDescription();
         }
 
+        setDefault(false);
+        parseDescription();
+    }
+
+    /** Constructor for the PassageSection object.
+     * @param newDescription Provide a description for the PassageSection
+     * @param defaultStatus Indicate whether this Passage connects Default Spaces
+     */
+    public PassageSection(String newDescription, boolean defaultStatus) {
+        setDescription(newDescription);
+        setDefault(defaultStatus);
         parseDescription();
     }
 
@@ -28,19 +40,26 @@ public class PassageSection {
      * @param newDescription Provide a description for the PassageSection
      */
     public PassageSection(String newDescription) {
-        setDescription(newDescription);
-        parseDescription();
+        this(newDescription, false);
     }
 
     private void parseDescription() {
         if (contains("archway") || contains("door")) {
             if (!hasDoor()) {
-                addDoor(new Door());
+                setDoor(new Door());
 
                 if (belongsToPassage()) {
-                    door.setSpaces(passage, new Chamber(getDoor()));
+                    if (isDefault) {
+                        door.setSpaces(passage, new DefaultChamber(getDoor()));
+                    } else {
+                        door.setSpaces(passage, new Chamber(getDoor()));
+                    }
                 } else {
-                    door.setSpaceTwo(new Chamber(getDoor()));
+                    if (isDefault) {
+                        door.setSpaceTwo(new DefaultChamber(getDoor()));
+                    } else {
+                        door.setSpaceTwo(new Chamber(getDoor()));
+                    }
                 }
             }
         } else {
@@ -89,7 +108,7 @@ public class PassageSection {
     /** Add a door to the PassageSection.
      * @param newDoor The door to be added to the PassageSection
      */
-    public void addDoor(Door newDoor) {
+    public void setDoor(Door newDoor) {
         door = newDoor;
     }
 
@@ -180,6 +199,10 @@ public class PassageSection {
         if (hasDoor()) {
             door.setSpaceOne(passage);
         }
+    }
+
+    public void setDefault(boolean defaultStatus) {
+        isDefault = defaultStatus;
     }
 
     /** Set the description for the PassageSection.

@@ -164,6 +164,7 @@ public class Passage extends Space {
     /** Add a door to the space.
      * @param theDoor The door to be added to the space
      */
+
     @Override
     public void setDoor(Door theDoor) {
         PassageSection currSection;
@@ -171,7 +172,7 @@ public class Passage extends Space {
         currSection = sectionList.get(sectionList.size() - 1);
         doorMap.put(theDoor, currSection);
 
-        currSection.addDoor(theDoor);
+        currSection.setDoor(theDoor);
     }
 
     /** Remove the door from each PassageSection and set the last as a dead end. */

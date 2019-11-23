@@ -40,11 +40,13 @@ public class Chamber extends Space {
         
         contents = new ChamberContents();
         contents.chooseContents(Die.d20());
+
         shape = ChamberShape.selectChamberShape(Die.d20());
+
         entrance = door;
         entrance.setSpaceTwo(this);
 
-        parseContents();
+        /* parseContents(); */
         parseShape();
     }
 
@@ -55,9 +57,7 @@ public class Chamber extends Space {
         return entrance;
     }
 
-    protected void parseContents() {
-        StringBuilder desc = new StringBuilder();
-
+    void parseContents() {
         if (containsContent("monster")) {
             addMonster(new Monster());
         }
