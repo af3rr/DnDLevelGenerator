@@ -1,6 +1,7 @@
 package database;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class DBMonster {
 
@@ -18,10 +19,14 @@ public class DBMonster {
 		setUpperBound(upper);
 		setLowerBound(lower);
 		setDescription(desc);
-
 	}
 	
     //might be easier to make some constructors here
+
+    public static String getRandom() {
+        Random rand = new Random();
+        return "M" + (rand.nextInt(3) + 1);
+    }
 
     public void setName(String name){
 		monsterName = name;
