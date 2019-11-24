@@ -19,6 +19,7 @@
   <property name="jar_file" value="gui.jar"/>
   <property name="main_class" value="control.Launcher"/>
   <property name="res_folder" value="res"/>
+  <property name="css_file" value="res"/>
     <property name="env.JAVAFX_HOME" value="./javafxlib/"/>
 
   <property environment="env"/>
@@ -85,7 +86,12 @@
    <target name="copy" 
         description="copy res folder image, css files to build folder">
         <copy todir="${build}/${res_folder}">
-	  <fileset dir="${res}"/>
+	        <fileset dir="${res}"/>
+        </copy>
+        
+        <copy todir="${build}/gui/">
+	        <fileset file="src/gui/**.css"/>
+	        <fileset file="src/gui/**.ttf"/>
         </copy>
   </target> 
 
