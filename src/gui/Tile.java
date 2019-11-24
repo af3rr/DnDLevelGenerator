@@ -115,7 +115,7 @@ public class Tile extends StackPane {
     }
 
     public void setBackground(Paint fill) {
-        background = new Rectangle(64, 64, fill);
+        background = new Rectangle(96, 96, fill);
     }
 
     private void setCornerShadow() {
@@ -135,10 +135,18 @@ public class Tile extends StackPane {
             case "} ":
             case " [":
             case "] ":
-                if (grid.cell(row-1, col-1).equals("##")) {
-                    setShadow(new Image("file:res/shadow_cut_b.png"), Pos.TOP_CENTER);
-                } else {
-                    setShadow(new Image("file:res/shadow_t.png"), Pos.TOP_CENTER);
+                switch (grid.cell(row-1, col-1)) {
+                    case "##":
+                    case "M1":
+                    case "M2":
+                    case "M3":
+                    case "TT":
+                        setShadow(new Image("file:res/shadow_cut_b.png"), Pos.TOP_CENTER);
+                        break;
+                    
+                    default:
+                        setShadow(new Image("file:res/shadow_t.png"), Pos.TOP_CENTER);
+                        break;
                 }
 
             default:
