@@ -1,6 +1,6 @@
 package control;
 
-import javafx.scene.control.ToggleButton;
+import dnd.models.Treasure;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,10 +15,10 @@ import gui.SpaceGrid;
 import gui.Tile;
 import model.Door;
 import model.Space;
-import dnd.models.Treasure;
 import model.DefaultLevel;
 import model.DefaultPassage;
 import model.DefaultChamber;
+import dnd.models.Treasure;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,10 +33,10 @@ import java.io.IOException;
 public class Controller {
     private LevelUI levelUI;
     private DefaultLevel level;
-    private ArrayList<SpaceGrid> chamberDisplays;
-    private ArrayList<SpaceGrid> passageDisplays;
     private ArrayList<DefaultChamber> chambers;
     private ArrayList<DefaultPassage> passages;
+    private ArrayList<SpaceGrid> chamberDisplays;
+    private ArrayList<SpaceGrid> passageDisplays;
     private HashMap<String, Integer> treasureTypes;
     private DBConnection db;
    
@@ -81,11 +81,11 @@ public class Controller {
         passageDisplays = new ArrayList<>();
 
         for (DefaultChamber c : chambers) {
-            chamberDisplays.add(new SpaceGrid(c));
+            chamberDisplays.add(new SpaceGrid(c.getLayout()));
         }
 
         for (DefaultPassage p : passages) {
-            passageDisplays.add(new SpaceGrid(p));
+            passageDisplays.add(new SpaceGrid(p.getLayout()));
         }
     }
 
@@ -98,11 +98,8 @@ public class Controller {
             fileIn.close();
             objIn.close();
 
-        } catch (IOException i) {
-            i.printStackTrace();
-
-        } catch (ClassNotFoundException c) {
-            c.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -120,20 +117,7 @@ public class Controller {
 
         } catch (IOException i) {
             i.printStackTrace();
-
         }
-    }
-
-    public void setPassageText(int i) {
-        DefaultPassage passage = passages.get(i);
-        levelUI.setTitle("Passage " + (i + 1));
-        levelUI.setDescription(passage.getDescription());
-    }
-
-    public void setChamberText(int i) {
-        DefaultChamber chamber = chambers.get(i);
-        levelUI.setTitle("Chamber " + (i + 1));
-        levelUI.setDescription(chamber.getDescription());
     }
 
     public ArrayList<Button> getChamberDoorButtons(int c) {
@@ -150,7 +134,6 @@ public class Controller {
 
     public ComboBox getMonsterOptions() {
         ComboBox removableMonsters = new ComboBox();
-        ArrayList<String> names = new ArrayList<>();
         SpaceGrid grid = levelUI.getDisplay();
 
         for (Tile tile : grid.getMonsters()) {
@@ -162,17 +145,17 @@ public class Controller {
     }
 
     public ComboBox getAllMonsterOptions() {
-        ComboBox adableMonsters = new ComboBox();
+        ComboBox addableMonsters = new ComboBox();
 
         for (String description : db.getAllMonsters()) {
-            adableMonsters.getItems().add(description);
+            addableMonsters.getItems().add(description);
         }
         
-        return adableMonsters;
+        return addableMonsters;
     }
 
     public void removeMonsterFromCurrent(String description, int index) {
-        int active = levelUI.getActiveNum();
+        int a = levelUI.getActiveNum() - 1;
         SpaceGrid grid = levelUI.getDisplay();
         ArrayList<Tile> monsterTiles = grid.getMonsters();
 
@@ -188,77 +171,73 @@ public class Controller {
             }
         }
 
-        if (levelUI.activeIsChamber()) {
-            chambers.get(active - 1).setLayout(grid.getLayout());
-        } else {
-            passages.get(active - 1).setLayout(grid.getLayout());
-        }
+        updateLayouts(a);
     }
 
 
     public void addMonsterToCurrent(String description) {
-        int active = levelUI.getActiveNum();
+        int a = levelUI.getActiveNum() - 1;
         DBMonster monster = new DBMonster();
         monster.setName(description.split(",")[0]);
 
         String type = "M" + monster.getType();
 
         if (levelUI.activeIsChamber()) {
-            int pos = chambers.get(active - 1).addToLayout(type);
-            chamberDisplays.get(active - 1).addMonster(type, pos / 8, pos % 8);
+            int pos = chambers.get(a).addToLayout(type);
+            chamberDisplays.get(a).addMonster(type, pos / 8, pos % 8);
+            setChamberText(a);
+
         } else {
-            int pos = passages.get(active - 1).addToLayout(type);
-            passageDisplays.get(active - 1).addMonster(type, pos / 8, pos % 8);
+            int pos = passages.get(a).addToLayout(type);
+            passageDisplays.get(a).addMonster(type, pos / 8, pos % 8);
+            setPassageText(a);
         }
     }
 
     public void removeTreasureFromCurrent(String description, int index) {
-        HashMap<Integer, Treasure> treasureMap;
+        int a = levelUI.getActiveNum() - 1;
+        HashMap<Integer, Treasure> map;
         SpaceGrid grid = levelUI.getDisplay();
         ArrayList<Tile> treasureTiles = grid.getTreasure();
-        int a = levelUI.getActiveNum();
 
-        treasureMap = levelUI.activeIsChamber() ? chambers.get(a-1).getTreasureMap() : passages.get(a-1).getTreasureMap();
+        map = levelUI.activeIsChamber() ? chambers.get(a).getTreasureMap() : passages.get(a).getTreasureMap();
         
         for (int i = 0; i < treasureTiles.size(); i++) {
             Tile tile = treasureTiles.get(i);
 
             if (i == index) {
-                Treasure treasure = treasureMap.get(cellAsInt(tile.row(), tile.column()));
+                Treasure treasure = map.get(cellAsInt(tile.row(), tile.column()));
 
                 if (description.equals(treasure.getDescription())) {
                     grid.removeTreasure(tile.row(), tile.column());
+                    map.remove(cellAsInt(tile.row(), tile.column()));
                     break;
                 }
             }
         }
 
-        if (levelUI.activeIsChamber()) {
-            chambers.get(a - 1).setLayout(grid.getLayout());
-        } else {
-            passages.get(a - 1).setLayout(grid.getLayout());
-        }
+        updateLayouts(a);
     }
 
     public void addTreasureToCurrent(String description) {
-        int active = levelUI.getActiveNum();
-        SpaceGrid grid = levelUI.getDisplay();
+        int a = levelUI.getActiveNum() - 1;
+        int type = treasureTypes.get(description);
 
         if (levelUI.activeIsChamber()) {
-            int type = treasureTypes.get(description);
-            int pos = chambers.get(active - 1).addToLayout("TT", type);
-            chamberDisplays.get(active - 1).addTreasure(pos / 8, pos % 8);
+            int pos = chambers.get(a).addToLayout("TT", type);
+            chamberDisplays.get(a).addTreasure(pos / 8, pos % 8);
+            setChamberText(a);
+
         } else {
-            int type = treasureTypes.get(description);
-            int pos = passages.get(active - 1).addToLayout("TT", type);
-            passageDisplays.get(active - 1).addTreasure(pos / 8, pos % 8);
+            int pos = passages.get(a).addToLayout("TT", type);
+            passageDisplays.get(a).addTreasure(pos / 8, pos % 8);
+            setPassageText(a);
         }
     }
 
     public ComboBox getTreasureOptions() {
         ComboBox removableTreasure = new ComboBox();
-        ArrayList<String> descriptions = new ArrayList<>();
-        HashMap<Integer, Treasure> treasureList = new HashMap<>();
+        HashMap<Integer, Treasure> treasureList;
         SpaceGrid grid = levelUI.getDisplay();
         int a = levelUI.getActiveNum();
 
@@ -272,25 +251,24 @@ public class Controller {
             Treasure treasure = treasureList.get(cellAsInt(tile.row(), tile.column()));
             removableTreasure.getItems().add(treasure.getDescription());
         }
-        
         return removableTreasure;
     }
 
     public ComboBox getAllTreasureOptions() {
         ComboBox addableTreasure = new ComboBox();
-        HashSet<String> uniqeTreasure = new HashSet<>();
+        HashSet<String> uniqueTreasure = new HashSet<>();
         
         for (int i = 0; i < 100; i++) {
             Treasure treasure = new Treasure();
             treasure.chooseTreasure(i);
-            uniqeTreasure.add(treasure.getDescription());
+
             treasureTypes.put(treasure.getDescription(), i);
+            uniqueTreasure.add(treasure.getDescription());
         }
 
-        for (String description : uniqeTreasure) {
+        for (String description : uniqueTreasure) {
             addableTreasure.getItems().add(description);
         }
-        
         return addableTreasure;
     }
 
@@ -300,8 +278,10 @@ public class Controller {
 
         for (int i = 0; i < dList.size(); i++) {
             Door door = dList.get(i);
+
             Button dButton = new Button("Door " + (i+1), new ImageView(image));
             Tooltip tooltip = new Tooltip(getDoorDescription(door));
+
             dButton.getStyleClass().add("door_button");
             dButton.setPrefWidth(200);
             dButton.setPrefHeight(16*3);
@@ -309,7 +289,6 @@ public class Controller {
             
             dButtons.add(dButton);
         }
-
         return dButtons;
     }
 
@@ -337,6 +316,50 @@ public class Controller {
         }
 
         return description.toString();
+    }
+
+    private void updateLayouts(int i) {
+        if (levelUI.activeIsChamber()) {
+            chambers.get(i).setLayout(levelUI.getDisplay().getLayout());
+            setChamberText(i);
+        } else {
+            passages.get(i).setLayout(levelUI.getDisplay().getLayout());
+            setPassageText(i);
+        }
+    }
+
+    public void setPassageText(int i) {
+        DefaultPassage passage = passages.get(i);
+        String description = passage.getDescription();
+
+        description += getMonsterDescriptions(getPassageDisplay(i));
+
+        levelUI.setTitle("Passage " + (i + 1));
+        levelUI.setDescription(description);
+    }
+
+    public void setChamberText(int i) {
+        DefaultChamber chamber = chambers.get(i);
+        String description = chamber.getDescription();
+
+        description += getMonsterDescriptions(getChamberDisplay(i));
+
+        levelUI.setTitle("Chamber " + (i + 1));
+        levelUI.setDescription(description);
+    }
+
+    private String getMonsterDescriptions(SpaceGrid grid) {
+        ArrayList<Tile> monsterTiles = grid.getMonsters();
+
+        String description = "\nMonsters: ";
+        description += monsterTiles.isEmpty() ? "None\n" : "\n";
+
+        for (Tile tile : monsterTiles) {
+            DBMonster monster = db.findMonster(tile.getMonsterType());
+            description += "  " + monster.getName() + "\n";
+        }
+
+        return description;
     }
 
     public int cellAsInt(int r, int c) {

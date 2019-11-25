@@ -1,10 +1,8 @@
 package model;
 
 import dnd.die.Die;
-import dnd.models.Monster;
-import dnd.models.Stairs;
 import dnd.models.Treasure;
-import gui.Layouts;
+import control.Layouts;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,14 +19,10 @@ public class DefaultPassage extends Passage {
     private Random rand;
 
     public DefaultPassage() {
-        this(new Door());
+        this(new Door(), DefaultPassage.randomType());
     }
 
-    public DefaultPassage(Door door) {
-        this(door, DefaultPassage.randomType());
-    }
-
-    public DefaultPassage(Door door, int i) {
+    private DefaultPassage(Door door, int t) {
         sectionList = new ArrayList<>();
         treasureMap = new HashMap<>();
         doors = new ArrayList<>();
@@ -38,12 +32,12 @@ public class DefaultPassage extends Passage {
         doors.add(null);
         doors.add(null);
 
-        type = i;
+        type = t;
         setLayout(type);
         parseLayout();
     }
 
-    public static int randomType() {
+    private static int randomType() {
         Random rand = new Random();
         return (rand.nextInt(5) + 1);
     }
@@ -52,11 +46,11 @@ public class DefaultPassage extends Passage {
         return String.format("%c%c", layout[r].charAt(c * 2), layout[r].charAt((c * 2)+1));
     }
 
-    public void parseLayout() {
+    private void parseLayout() {
         int[] sectionSeq = Layouts.sectionSequence(type);
 
-        for (int i = 0; i < sectionSeq.length; i++) {
-            addPassageSection(new PassageSection(true, sectionSeq[i]));
+        for (int i : sectionSeq) {
+            addPassageSection(new PassageSection(true, i));
         }
     }
 
@@ -83,11 +77,9 @@ public class DefaultPassage extends Passage {
         return validCell;
     }
 
-    boolean validPlacement(int r, int c) {
+    private boolean validPlacement(int r, int c) {
         if (cell(r, c).equals("##")) {
-            if (r > 0 && !cell(r-1, c).contains("D")) {
-                return true;
-            }
+            return (r > 0) && !cell(r-1, c).contains("D");
         }
         return false;
     }
@@ -113,20 +105,17 @@ public class DefaultPassage extends Passage {
         layout = updated;
     }
 
-    public void setLayout(int i) {
-        layout = Layouts.passage(i);
-    }
 
     public String[] getLayout() {
         return layout;
     }
 
+    private void setLayout(int i) {
+        layout = Layouts.passage(i);
+    }
+
     public void setLayout(String[] newLayout) {
         layout = newLayout;
-    }
-    
-    public void setType(int i) {
-        type = i;
     }
 
     public int getLength() {
@@ -138,7 +127,7 @@ public class DefaultPassage extends Passage {
         return new ArrayList<>(doors);
     }
 
-    public int getArea() {
+    private int getArea() {
         return Layouts.getArea(layout);
     }
 
@@ -162,16 +151,19 @@ public class DefaultPassage extends Passage {
     }
 
     public String getDescription() {
-        StringBuilder description = new StringBuilder();
+        String description = "";
 
-        description.append(String.format("Area: %d\n", getArea()));
-        description.append(String.format("Length: %d\n", getLength()));
-        description.append(String.format("Doors: %d\n", doors.size()));
+        description += String.format("Area: %d\n", getArea());
+        description += String.format("Length: %d\n", getLength());
+        description += String.format("Doors: %d\n", doors.size());
 
-        /* for (PassageSection section : sectionList) {
-            description.append(String.format(" - %s\n", section.getDescription()));
-        } */
+        description += "\nTreasure: ";
+        description += treasureMap.isEmpty() ? "None\n" : "\n";
 
-        return description.toString();
+        for (Treasure treasure : treasureMap.values()) {
+            description += "  " + treasure.getDescription() + "\n";
+        }
+
+        return description;
     }
 }

@@ -30,9 +30,8 @@ public class DefaultLevel implements java.io.Serializable {
             initialized = initialize();
         } while (!initialized);
     }
-    
-     /** Create 5 chambers and connect them. */
-     public boolean initialize() {
+
+     private boolean initialize() {
         DefaultChamber c1;
         DefaultChamber c2;
         ArrayList<Door> doorList1;
@@ -86,8 +85,7 @@ public class DefaultLevel implements java.io.Serializable {
         }
     }
 
-    /** Add 5 doors to the map and the chambers list. */
-    public void populateMap() {
+    private void populateMap() {
         DefaultChamber c;
         Random r = new Random();
         int t;
@@ -108,7 +106,7 @@ public class DefaultLevel implements java.io.Serializable {
         addChamber(c);
     }
 
-    public void addChamber(DefaultChamber c) {
+    private void addChamber(DefaultChamber c) {
         map.put(c, c.getDoors());
         chambers.add(c);
     }
@@ -144,7 +142,7 @@ public class DefaultLevel implements java.io.Serializable {
     /** Get the total amount of Doors between the 5 Chambers.
      * @return An integer representing the total number of Doors in the Level
      */
-    public int getTotalDoors() {
+    private int getTotalDoors() {
         int sum = 0;
 
         for (DefaultChamber c : chambers) {
@@ -169,10 +167,6 @@ public class DefaultLevel implements java.io.Serializable {
         
         map.get(c1).remove(d1);
         map.get(c2).remove(d2);
-    }
-
-    private boolean outOfDoors(DefaultChamber c) {
-        return map.get(c).isEmpty();
     }
 
     public ArrayList<DefaultChamber> getChambers() {

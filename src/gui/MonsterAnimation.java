@@ -3,9 +3,9 @@ package gui;
 import javafx.animation.Interpolator;
 import javafx.animation.Transition;
 import javafx.animation.Animation;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
+import javafx.geometry.Rectangle2D;
 import javafx.util.Duration;
 
 public class MonsterAnimation extends Transition {

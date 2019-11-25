@@ -20,7 +20,7 @@
 
 
 .button.edit_button {
-    -fx-padding: 50 20 100 0;
+    -fx-padding: 75 0 75 70;
     -fx-background-image: url('../../res/edit.png');
 }
 

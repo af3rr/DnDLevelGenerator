@@ -54,10 +54,3 @@
     -fx-background-color: #716f71;
     -fx-fill: #4f4a4b;
 }
-
-.combo-box-popup .list-cell {
-    -fx-padding: 4 0 4 5;
-
-    /* No alternate highlighting */
-    -fx-background-color: d0c4ac;
-}

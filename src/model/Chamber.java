@@ -9,7 +9,6 @@ import dnd.models.Exit;
 import dnd.models.Monster;
 import dnd.models.Stairs;
 import dnd.models.Treasure;
-import gui.Layouts;
 import dnd.die.Die;
 
 import java.util.ArrayList;
@@ -72,7 +71,7 @@ public class Chamber extends Space {
         }
     }
 
-    protected void parseShape() {
+    private void parseShape() {
         getShapeDimensions();
         area = shape.getArea();
         doors.clear();

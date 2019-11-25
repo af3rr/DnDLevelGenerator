@@ -1,36 +1,27 @@
 package gui;
 
+import control.Controller;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import control.Controller;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.paint.Color;
 import javafx.scene.layout.*;
-import javafx.scene.shape.StrokeType;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.DirectoryChooser;
-import javafx.scene.text.Font;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.geometry.Pos;
 
 import java.io.File;
 
 public class LevelUI<toReturn> extends Application {
     private final int RATIO = 3;
-    /* Even if it is a GUI it is useful to have instance variables
-    so that you can break the processing up into smaller methods that have
-    one responsibility.
-     */
+
     private Controller controller;
     private VBox root;
     private GridPane view;
@@ -54,23 +45,21 @@ public class LevelUI<toReturn> extends Application {
     @Override
     public void start(Stage assignedStage) {
         controller = new Controller(this);
-        root = new VBox();
         buttonGroup = new ToggleGroup();
         cButtons = new ArrayList<>();
         pButtons = new ArrayList<>();
         editButtons = new HashMap<>();
         spaceTitle = new Label();
         spaceDesc = new Label();
+        root = new VBox();
 
         initializeUI();
-
-        scene = new Scene(root, 1351, 768);
+        scene = new Scene(root, 1350, 768);
         scene.getStylesheets().add(getClass().getResource("buttons.css").toExternalForm());
 
-        
         primaryStage = assignedStage;
         primaryStage.setTitle("D&D Level Generator");
-        /* primaryStage.setResizable(false); */
+        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.sizeToScene();
         primaryStage.setMinHeight(primaryStage.getHeight());
@@ -81,6 +70,10 @@ public class LevelUI<toReturn> extends Application {
         createMenuBar();
         createView();
 
+        spaceTitle.setWrapText(true);
+        spaceTitle.setMaxWidth(200);
+        spaceDesc.setWrapText(true);
+        spaceDesc.setMaxWidth(200);
         spaceTitle.getStyleClass().add("space_title");
         spaceDesc.getStyleClass().add("space_desc");
         root.getChildren().addAll(menuBar, view);
@@ -172,7 +165,7 @@ public class LevelUI<toReturn> extends Application {
         }
     }
 
-    public ToggleButton createChamberButton(int number) {
+    private ToggleButton createChamberButton(int number) {
         ToggleButton cButton = new ToggleButton(String.valueOf(number));
         cButton.getStyleClass().add("chamber_button");
         cButton.setToggleGroup(buttonGroup);
@@ -183,7 +176,7 @@ public class LevelUI<toReturn> extends Application {
         return cButton;
     }
 
-    public ToggleButton createPassageButton(int number) {
+    private ToggleButton createPassageButton(int number) {
         ToggleButton pButton = new ToggleButton("Passage " + number);
         pButton.getStyleClass().add("passage_button");
         pButton.setToggleGroup(buttonGroup);
@@ -194,7 +187,7 @@ public class LevelUI<toReturn> extends Application {
         return pButton;
     }
 
-    public Button createButton(String text) {
+    private Button createButton(String text) {
         Button button = new Button(text);
         button.getStyleClass().add("button");
         button.setPrefWidth(43*3);
@@ -203,7 +196,7 @@ public class LevelUI<toReturn> extends Application {
         return button;
     }
 
-    public Button createEditButton() {
+    private Button createEditButton() {
         Button button = new Button();
         button.getStyleClass().add("edit_button");
         button.setPrefWidth(19*3);
@@ -216,7 +209,7 @@ public class LevelUI<toReturn> extends Application {
         return button;
     }
 
-    public Button createConfirmEditButton(int i) {
+    private Button createConfirmEditButton(int i) {
         switch(i) {
             case 0:
                 return createRemoveMonsterButton();
@@ -231,7 +224,7 @@ public class LevelUI<toReturn> extends Application {
         }
     }
 
-    public Button baseEditButton() {
+    private Button baseEditButton() {
         Button button = new Button();
         button.getStyleClass().add("select_button");
         button.setPrefWidth(12*3);
@@ -240,7 +233,7 @@ public class LevelUI<toReturn> extends Application {
         return button;
     }
 
-    public Button createRemoveMonsterButton() {
+    private Button createRemoveMonsterButton() {
         Button button = baseEditButton();
 
         button.setOnAction((ActionEvent event) -> {
@@ -258,7 +251,7 @@ public class LevelUI<toReturn> extends Application {
         return button;
     }
 
-    public Button createAddMonsterButton() {
+    private Button createAddMonsterButton() {
         Button button = baseEditButton();
 
         button.setOnAction((ActionEvent event) -> {
@@ -275,7 +268,7 @@ public class LevelUI<toReturn> extends Application {
         return button;
     }
 
-    public Button createRemoveTreasureButton() {
+    private Button createRemoveTreasureButton() {
         Button button = baseEditButton();
 
         button.setOnAction((ActionEvent event) -> {
@@ -293,7 +286,7 @@ public class LevelUI<toReturn> extends Application {
         return button;
     }
 
-    public Button createAddTreasureButton() {
+    private Button createAddTreasureButton() {
         Button button = baseEditButton();
 
         button.setOnAction((ActionEvent event) -> {
@@ -347,57 +340,6 @@ public class LevelUI<toReturn> extends Application {
         return load;
     }
 
-    private void setToChamber(int i) {
-        if (display != null) {
-            view.getChildren().remove(display); 
-        }
-
-        if (doorMenu != null) {
-            view.getChildren().remove(doorMenu);
-        }
-            
-        active = String.valueOf(i + 1);
-        display = controller.getChamberDisplay(i);
-        controller.setChamberText(i);
-        view.add(display, 1, 0);
-        createDoorMenu(controller.getChamberDoorButtons(i));
-    }
-
-    private void setToPassage(int i) {
-        if (display != null) {
-            view.getChildren().remove(display); 
-        }
-
-        if (doorMenu != null) {
-            view.getChildren().remove(doorMenu);
-        }
-            
-        display = controller.getPassageDisplay(i);
-        controller.setPassageText(i);
-        view.add(display, 1, 0);
-        createDoorMenu(controller.getPassageDoorButtons(i));
-    }
-
-    public String getActive() {
-        return active;
-    }
-
-    public int getActiveNum() {
-        if (activeIsChamber()) {
-            return Integer.parseInt(active);
-        } else {
-            return Integer.parseInt(active.split(" ")[1]);
-        }
-    }
-
-    public SpaceGrid getDisplay() {
-        return display;
-    }
-
-    public boolean activeIsChamber() {
-        return !active.contains("Passage");
-    }
-
     private void prompt() {
         TextField filename = new TextField();
         Button confirm = createButton("OK");
@@ -413,7 +355,7 @@ public class LevelUI<toReturn> extends Application {
         secondaryStage.initModality(Modality.APPLICATION_MODAL);
         secondaryStage.setScene(secondScene);
         secondaryStage.setTitle("Save File");
-        /* secondaryStage.setResizable(false); */
+        secondaryStage.setResizable(false);
 
         secondaryStage.setX(primaryStage.getX() + 300);
         secondaryStage.setY(primaryStage.getY() + 200);
@@ -434,9 +376,8 @@ public class LevelUI<toReturn> extends Application {
         });
     }
 
-    public void openEdit() {
+    private void openEdit() {
         VBox editRoot = new VBox();
-        /* comboBox.getItems().addAll("Option 4", "Option 5", "Option 6"); */
         ComboBox removableMonsters = controller.getMonsterOptions();
         ComboBox addableMonsters = controller.getAllMonsterOptions();
         ComboBox removableTreasure = controller.getTreasureOptions();
@@ -458,10 +399,9 @@ public class LevelUI<toReturn> extends Application {
         secondaryStage.setY(primaryStage.getY() + 200);
         secondaryStage.setResizable(false);
         secondaryStage.show();
-        /* final ComboBox comboBox = new ComboBox(options); */
     }
 
-    public void initEditRoot(VBox editRoot, ComboBox[] comboBoxes, String[] labels) {
+    private void initEditRoot(VBox editRoot, ComboBox[] comboBoxes, String[] labels) {
         editRoot.getStyleClass().add("edit_box");
 
         GridPane gridPane = new GridPane();
@@ -486,28 +426,57 @@ public class LevelUI<toReturn> extends Application {
         }
     }
 
-/*     private Popup createPopUp(int x, int y, String text) {
-        Popup popup = new Popup();
-        popup.setX(x);
-        popup.setY(y);
-        TextArea textA = new TextArea(text);
-        popup.getContent().addAll(textA);
-        textA.setStyle(" -fx-background-color: white;");
-        textA.setMinWidth(80);
-        textA.setMinHeight(50);
-        return popup;
-    } */
-
-/*     private void changeDescriptionText(String text) {
-        ObservableList<Node> list = descriptionPane.getContent();
-        for (Node t : list) {
-            if (t instanceof TextArea) {
-                TextArea temp = (TextArea) t;
-                temp.setText(text);
-            }
-
+    private void setToChamber(int i) {
+        if (display != null) {
+            view.getChildren().remove(display);
         }
-    } */
+
+        if (doorMenu != null) {
+            view.getChildren().remove(doorMenu);
+        }
+
+        active = String.valueOf(i + 1);
+        display = controller.getChamberDisplay(i);
+        controller.setChamberText(i);
+        view.add(display, 1, 0);
+        createDoorMenu(controller.getChamberDoorButtons(i));
+    }
+
+    private void setToPassage(int i) {
+        if (display != null) {
+            view.getChildren().remove(display);
+        }
+
+        if (doorMenu != null) {
+            view.getChildren().remove(doorMenu);
+        }
+
+        display = controller.getPassageDisplay(i);
+        controller.setPassageText(i);
+        view.add(display, 1, 0);
+        createDoorMenu(controller.getPassageDoorButtons(i));
+    }
+
+
+    public int getActiveNum() {
+        if (activeIsChamber()) {
+            return Integer.parseInt(active);
+        } else {
+            return Integer.parseInt(active.split(" ")[1]);
+        }
+    }
+
+    private String getActive() {
+        return active;
+    }
+
+    public SpaceGrid getDisplay() {
+        return display;
+    }
+
+    public boolean activeIsChamber() {
+        return !active.contains("Passage");
+    }
 
     public void setTitle(String title) {
         spaceTitle.setText(title);

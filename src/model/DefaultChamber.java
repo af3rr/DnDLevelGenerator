@@ -1,33 +1,26 @@
 package model;
 
+import database.DBConnection;
 import dnd.die.Die;
 import dnd.models.ChamberContents;
-import dnd.models.Monster;
 import dnd.models.Stairs;
 import dnd.models.Treasure;
-import gui.Layouts;
+import control.Layouts;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import database.DBConnection;
-import database.DBMonster;
-
 public class DefaultChamber extends Chamber {
-    private Door entrance;
-    private DBConnection db;
     private ChamberContents contents;
     private ArrayList<Door> doors;
     private HashMap<Integer, Treasure> treasureMap;
     private ArrayList<Integer> monsters;
     private String[] layout;
-    private Stairs stairs;
     private int height;
     private int width;
-    private int area;
     private Random rand;
-    int type;
+    private int type;
 
     public DefaultChamber() {
         this(DefaultChamber.randomType());
@@ -42,16 +35,12 @@ public class DefaultChamber extends Chamber {
     }
 
     public DefaultChamber(Door door, int t) {
-        db = new DBConnection();
         treasureMap = new HashMap<>();
         monsters = new ArrayList<>();
         doors = new ArrayList<>();
         rand = new Random();
 
-        entrance = door;
-        entrance.setSpaceTwo(this);
-
-        setType(t);
+        type = t;
         setLayout(type);
         setWidth(Layouts.getWidth(layout));
         setHeight(Layouts.getHeight(layout));
@@ -62,7 +51,7 @@ public class DefaultChamber extends Chamber {
         parseContents();
     }
 
-    public static int randomType() {
+    private static int randomType() {
         Random rand = new Random();
         return (rand.nextInt(10) + 1);
     }
@@ -73,14 +62,6 @@ public class DefaultChamber extends Chamber {
 
     protected boolean containsContent(String item) {
         return contents.getDescription().toLowerCase().contains(item);
-    }
-
-    public void addDoors() {
-        int numDoors = Layouts.numDoors(layout);
-
-        for (int i = 0; i < numDoors; i++) {
-            doors.add(new Door());
-        }
     }
 
     void parseContents() {
@@ -123,11 +104,9 @@ public class DefaultChamber extends Chamber {
     }
 
 
-    boolean validPlacement(int r, int c) {
+    private boolean validPlacement(int r, int c) {
         if (cell(r, c).equals("##")) {
-            if (r > 0 && cell(r-1, c).equals("##")) {
-                return true;
-            }
+            return (r > 0) && cell(r-1, c).equals("##");
         }
         return false;
     }
@@ -153,36 +132,48 @@ public class DefaultChamber extends Chamber {
         layout = updated;
     }
 
-    public void setType(int i) {
-        type = i;
-    }
-
-    public void setWidth(int w) {
+    private void setWidth(int w) {
         width = w;
     }
 
-    public void setHeight(int h) {
+    private void setHeight(int h) {
         height = h;
     }
 
-    public int getWidth() {
-        return width;   
-    }
-
-    public int getHeight() {
-        return height;   
+    private void setLayout(int i) {
+        layout = Layouts.chamber(i);
     }
 
     public void setLayout(String[] newLayout) {
         layout = newLayout;
     }
 
-    public void setLayout(int i) {
-        layout = Layouts.chamber(i);
-    }
-
     public String[] getLayout() {
         return layout;
+    }
+
+    public String getDescription() {
+        String description = Layouts.getDescription(type);
+        description += "\nTreasure: ";
+        description += treasureMap.isEmpty() ? "None\n" : "\n";
+
+        for (Treasure treasure : treasureMap.values()) {
+            description += "  " + treasure.getDescription() + "\n";
+        }
+
+        return description;
+    }
+
+    private void addDoors() {
+        int numDoors = Layouts.numDoors(layout);
+
+        for (int i = 0; i < numDoors; i++) {
+            doors.add(new Door());
+        }
+    }
+
+    public int numDoors() {
+        return doors.size();
     }
 
     @Override
@@ -192,13 +183,5 @@ public class DefaultChamber extends Chamber {
 
     public HashMap<Integer, Treasure> getTreasureMap(){
         return treasureMap;
-    }
-
-    public String getDescription() {
-        return Layouts.getDescription(type);
-    }
-
-    public int numDoors() {
-        return doors.size();
     }
 }

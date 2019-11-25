@@ -3,39 +3,17 @@ package gui;
 import javafx.scene.layout.GridPane;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import javafx.scene.Node;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
-import model.DefaultChamber;
-import model.DefaultPassage;
-import model.Space;
 
 public class SpaceGrid extends GridPane {
-    private GridPane grid;
-    private DefaultChamber chamber;
-    private DefaultPassage passage;
-    private String[] layout;
     private Tile[][] tileMatrix;
-    private ArrayList<Tile> monsters;
-    private ArrayList<Tile> treasure;
+    private String[] layout;
     private int width;
     private int height;
 
-    public SpaceGrid(Space space) {
+    public SpaceGrid(String[] space) {
         tileMatrix = new Tile[8][9];
 
-        if (space instanceof DefaultChamber) {
-            chamber = (DefaultChamber) space;
-            layout = chamber.getLayout();
-            
-        } else if (space instanceof DefaultPassage) {
-            passage = (DefaultPassage) space;
-            layout = passage.getLayout();
-        }
-
+        layout = space;
         width = layout[0].length() / 2; // 9
         height = layout.length; // 8
 
@@ -50,14 +28,6 @@ public class SpaceGrid extends GridPane {
 
     public String cell(int r, int c) {
         return String.format("%c%c", layout[r].charAt(c * 2), layout[r].charAt((c * 2)+1));
-    }
-
-    public GridPane getGrid() {
-        return grid;
-    }
-
-    public Tile[][] getMatrix() {
-        return tileMatrix;
     }
 
     public String[] getLayout() {
@@ -95,7 +65,7 @@ public class SpaceGrid extends GridPane {
     }
 
     public ArrayList<Tile> getMonsters() {
-        monsters = new ArrayList<>();
+        ArrayList<Tile> monsters = new ArrayList<>();
 
         for (int r = 0; r < height; r++) {
             for (int c = 0; c < width; c++) {
@@ -109,7 +79,7 @@ public class SpaceGrid extends GridPane {
     }
 
     public ArrayList<Tile> getTreasure() {
-        treasure = new ArrayList<>();
+        ArrayList<Tile> treasure = new ArrayList<>();
 
         for (int r = 0; r < height; r++) {
             for (int c = 0; c < width; c++) {

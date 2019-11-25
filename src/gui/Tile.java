@@ -2,7 +2,7 @@ package gui;
 
 import java.util.HashMap;
 import javafx.collections.ObservableList;
-import javafx.geometry.Pos;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.Node;
@@ -10,6 +10,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.geometry.Pos;
 
 
 public class Tile extends StackPane {
@@ -107,7 +108,7 @@ public class Tile extends StackPane {
     }
 
 
-    
+
     private boolean isEntity() {
         return code.contains("M") || code.equals("TT");
     }
@@ -130,12 +131,12 @@ public class Tile extends StackPane {
 
 
 
-    public void setTexture() {
+    private void setTexture() {
         Image image = textures.get(code);
         background = new ImageView(image);
     }
 
-    public void setBackground(Paint fill) {
+    private void setBackground(Paint fill) {
         background = new Rectangle(96, 96, fill);
     }
 
@@ -197,7 +198,7 @@ public class Tile extends StackPane {
         StackPane.setAlignment(shadow, pos);
     }
 
-    public void initTextures() {
+    private void initTextures() {
         textures.put("+-", new Image("file:res/front_corner_r.png"));
         textures.put("-+", new Image("file:res/front_corner_l.png"));
         textures.put("--", new Image("file:res/front_wall.png"));
