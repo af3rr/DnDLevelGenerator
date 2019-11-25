@@ -1,11 +1,12 @@
 package database;
 
 import java.util.ArrayList;
+import java.io.Serializable;
 import java.sql.*;
 
 
-public class DBConnection {
-	
+public class DBConnection implements java.io.Serializable {
+    private static final long serialversionUID = 124583596L;
 	private Connection conn = null;
     private Statement stmt = null;
     private ResultSet rs = null;
@@ -16,13 +17,11 @@ public class DBConnection {
 	
 	public DBConnection() {
 		this(DBDetails.username, DBDetails.password);
-
-		//connect(); // test our connection
 	}
 	
 	public DBConnection(String u, String p) {
 		username = u;
-		password = p; 
+		password = p;
 	}
 	
 	/**
@@ -102,13 +101,32 @@ public class DBConnection {
  		System.out.println(sql);
  		dbUpdate(sql);
 	}
-	
+    
+    
+	/**
+	 * Loads and returns a DBMonster object, containing any available information.
+	 * @param t The type of the monster
+	 * @return DBMonster object 
+	 */
+	public DBMonster findMonster(int t) {
+        switch(t) {
+            case 1:
+                return findMonster("skeleton");
+            case 2:
+                return findMonster("spider");
+            case 3:
+                return findMonster("shrieker");
+            default:
+                return null;
+        }
+    }
+
 	/**
 	 * Loads and returns a DBMonster object, containing any available information.
 	 * @param id The name of the monster
 	 * @return DBMonster object 
 	 */
-	public DBMonster findMonster( String name) {
+	public DBMonster findMonster(String name) {
 		DBMonster monster = new DBMonster();
 		String sql = "SELECT * FROM Monsters WHERE name = '" + name + "';";		
         connect();
@@ -120,7 +138,7 @@ public class DBConnection {
 			while(rs.next()) {
 				monster.setName(rs.getString("name"));
 				monster.setUpperBound(rs.getString("upper"));
-				monster.setLowerBound("lower");
+				monster.setLowerBound(rs.getString("lower"));
 				monster.setDescription(rs.getString("description"));
 			}
 
