@@ -9,6 +9,8 @@ import javafx.scene.image.Image;
 import javafx.util.Duration;
 
 public class MonsterAnimation extends Transition {
+    private final int RATIO = 3;
+    
     private ImageView image;
     private Duration duration;
     private int frames;
@@ -58,24 +60,24 @@ public class MonsterAnimation extends Transition {
         image.setImage(new Image("file:res/skeleton.png"));
         duration = Duration.millis(365);
         frames = 4;
-        width = 22*2;
-        height = 30*2;
+        width = 22*RATIO;
+        height = 30*RATIO;
     }
 
     public void setSpider() {
         image.setImage(new Image("file:res/spider.png"));
         duration = Duration.millis(365);
         frames = 4;
-        width = 24*2;
-        height = 23*2;
+        width = 24*RATIO;
+        height = 23*RATIO;
     }
 
     public void setShrieker() {
         image.setImage(new Image("file:res/shrieker.png"));
         duration = Duration.millis(725);
         frames = 8;
-        width = 32*2;
-        height = 32*2;
+        width = 32*RATIO;
+        height = 32*RATIO;
     }
 
 }

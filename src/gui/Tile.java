@@ -44,7 +44,7 @@ public class Tile extends StackPane {
         become();
 
         children.add(background);
-        getLastChild().toBack();
+        children.get(children.size()-1).toBack();
         children.add(treasure);
     }
 
@@ -64,7 +64,7 @@ public class Tile extends StackPane {
             case "M2":
             case "M3":
                 setBackground(Color.rgb(162, 153, 143));
-                addMonster();
+                addMonster(grid.cell(row, col));
                 break;
 
             case "TT":
@@ -78,6 +78,36 @@ public class Tile extends StackPane {
         }
     }
 
+    public void addTreasure() {
+        treasure.setImage(textures.get("TT"));
+    }
+
+    public void removeTreasure() {
+        treasure.setImage(null);
+        code = "##";
+        become();
+    }
+
+    public void addMonster(String type) {
+        MonsterAnimation a = new MonsterAnimation(type);
+        monster = a.getImage();
+        children.add(monster);
+        a.play();
+        code = type;
+    }
+
+    public void removeMonster() {
+        monster.setImage(null);
+        code = "##";
+        /* become(); */
+    }
+
+    public int getMonsterType() {
+        return Integer.parseInt(code.substring(1));
+    }
+
+
+    
     private boolean isEntity() {
         return code.contains("M") || code.equals("TT");
     }
@@ -86,28 +116,19 @@ public class Tile extends StackPane {
         return code.equals("##");
     }
 
-    private Node getLastChild() {
-        return children.get(children.size()-1);
+    public String getCode() {
+        return code;
     }
 
-    public void addTreasure() {
-        treasure.setImage(textures.get("TT"));
+    public int row() {
+        return row;
     }
 
-    public void removeTreasure() {
-        treasure.setImage(null);
+    public int column() {
+        return col;
     }
 
-    public void addMonster() {
-        MonsterAnimation a = new MonsterAnimation(grid.cell(row, col));
-        monster = a.getImage();
-        children.add(monster);
-        a.play();
-    }
 
-    public void removeMonster() {
-        monster.setImage(null);
-    }
 
     public void setTexture() {
         Image image = textures.get(code);
@@ -118,6 +139,7 @@ public class Tile extends StackPane {
         background = new Rectangle(96, 96, fill);
     }
 
+
     private void setCornerShadow() {
         if (grid.cell(row-1, col-1).equals("] ")) {
             setShadow(new Image("file:res/shadow_corner_r.png"), Pos.TOP_LEFT);
@@ -127,6 +149,7 @@ public class Tile extends StackPane {
     private void setTopShadow() {
         switch (grid.cell(row-1, col)) {
             case "--":
+            case "DA":
             case "D1":
             case "DL":
             case "D2":
@@ -190,5 +213,6 @@ public class Tile extends StackPane {
         textures.put("} ", new Image("file:res/back_end_r.png"));
         textures.put(" {", new Image("file:res/back_end_l.png"));
         textures.put("TT", new Image("file:res/treasure.png"));
+        textures.put("DA", new Image("file:res/archway.png"));
     }
 }
