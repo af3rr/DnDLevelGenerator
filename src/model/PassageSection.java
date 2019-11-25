@@ -4,7 +4,8 @@ import dnd.die.Die;
 import dnd.models.Monster;
 import dnd.models.Stairs;
 
-public class PassageSection {
+public class PassageSection implements java.io.Serializable {
+    private static final long serialversionUID = 184543754L;
     private String description;
     private Passage passage;
     private Door door;
@@ -16,14 +17,21 @@ public class PassageSection {
      * @param roll Set the description for the passage (optional)
      */
     public PassageSection(int... roll) {
+        this(false, roll);
+    }
+
+    /** Constructor for the PassageSection object.
+     * @param roll Set the description for the passage (optional)
+     * @param defaultStatus Set whether the PassageSection connects Chambers or DefaultChambers
+     */
+    public PassageSection(boolean defaultStatus, int... roll) {
+        setDefault(defaultStatus);
+        
         if (roll.length == 1) {
             setDescription(roll[0]);
         } else {
             setDescription();
         }
-
-        setDefault(false);
-        parseDescription();
     }
 
     /** Constructor for the PassageSection object.
@@ -46,7 +54,9 @@ public class PassageSection {
     private void parseDescription() {
         if (contains("archway") || contains("door")) {
             if (!hasDoor()) {
-                setDoor(new Door());
+                Door newDoor = new Door();
+                newDoor.setArchway(contains("archway"));
+                setDoor(newDoor);
 
                 if (belongsToPassage()) {
                     if (isDefault) {

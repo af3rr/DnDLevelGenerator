@@ -9,6 +9,7 @@ import dnd.models.Exit;
 import dnd.models.Monster;
 import dnd.models.Stairs;
 import dnd.models.Treasure;
+import gui.Layouts;
 import dnd.die.Die;
 
 import java.util.ArrayList;
@@ -211,19 +212,19 @@ public class Chamber extends Space {
     }
 
     /** Add a door to the Chamber.
-     * @param newDoor The door to be added to the Chamber
+     * @param door The door to be added to the Chamber
      */
     @Override
-    public void setDoor(Door newDoor) {
-        doors.add(newDoor);
-        newDoor.setSpaceOne(this);
+    public void setDoor(Door door) {
+        doors.add(door);
+        door.setSpaceOne(this);
     }
 
     /** Remove a known Door from the Chamber.
-     * @param theDoor The door to be removed from the Chamber
+     * @param door The door to be removed from the Chamber
      */
-    public void removeDoor(Door theDoor) {
-        doors.remove(theDoor);
+    public void removeDoor(Door door) {
+        doors.remove(door);
     }
 
     /** Change the Chamber's shape until it has atleast one door. */

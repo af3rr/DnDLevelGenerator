@@ -2,7 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
-public abstract class Space {
+public abstract class Space implements java.io.Serializable {
+    private static final long serialversionUID = 1875319452L;
     /** Add a door to the space.
      * @param theDoor The door to be added to the space
      */

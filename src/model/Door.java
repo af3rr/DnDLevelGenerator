@@ -5,7 +5,9 @@ import dnd.models.Trap;
 import dnd.die.Die;
 import java.util.ArrayList;
 
-public class Door {
+public class Door implements java.io.Serializable {
+    private static final long serialversionUID = 579135846L;
+
     private ArrayList<Space> spaces;
     private boolean trapped;
     private boolean locked;
@@ -207,8 +209,9 @@ public class Door {
      * @return A String representing a description of the door
      */
     public String getDescription() {
-        description = String.format("%s %s, ", exit.getLocation(), exit.getDirection());
-
+        /* description = String.format("%s %s, ", exit.getLocation(), exit.getDirection()); */
+        description = "";
+        
         if (isArchway()) {
             description += "archway, not trapped or locked";
 

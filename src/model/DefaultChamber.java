@@ -8,16 +8,19 @@ import dnd.models.Treasure;
 import gui.Layouts;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
+import database.DBConnection;
 import database.DBMonster;
 
 public class DefaultChamber extends Chamber {
     private Door entrance;
+    private DBConnection db;
     private ChamberContents contents;
     private ArrayList<Door> doors;
-    private ArrayList<Treasure> treasure;
-    private ArrayList<Monster> monsters;
+    private HashMap<Integer, Treasure> treasureMap;
+    private ArrayList<Integer> monsters;
     private String[] layout;
     private Stairs stairs;
     private int height;
@@ -30,12 +33,17 @@ public class DefaultChamber extends Chamber {
         this(DefaultChamber.randomType());
     }
 
-    public DefaultChamber(int i) {
-        this(new Door(), i);
+    public DefaultChamber(Door door) {
+        this(door, DefaultChamber.randomType());
     }
 
-    public DefaultChamber(Door door, int i) {
-        treasure = new ArrayList<>();
+    public DefaultChamber(int t) {
+        this(new Door(), t);
+    }
+
+    public DefaultChamber(Door door, int t) {
+        db = new DBConnection();
+        treasureMap = new HashMap<>();
         monsters = new ArrayList<>();
         doors = new ArrayList<>();
         rand = new Random();
@@ -43,7 +51,7 @@ public class DefaultChamber extends Chamber {
         entrance = door;
         entrance.setSpaceTwo(this);
 
-        setType(i);
+        setType(t);
         setLayout(type);
         setWidth(Layouts.getWidth(layout));
         setHeight(Layouts.getHeight(layout));
@@ -63,6 +71,10 @@ public class DefaultChamber extends Chamber {
         return String.format("%c%c", layout[r].charAt(c * 2), layout[r].charAt((c * 2)+1));
     }
 
+    protected boolean containsContent(String item) {
+        return contents.getDescription().toLowerCase().contains(item);
+    }
+
     public void addDoors() {
         int numDoors = Layouts.numDoors(layout);
 
@@ -73,11 +85,12 @@ public class DefaultChamber extends Chamber {
 
     void parseContents() {
         if (containsContent("monster")) {
-            addToLayout(DBMonster.getRandom());
+            int mType = rand.nextInt(3) + 1;
+            monsters.add(mType);
+            addToLayout("M" + mType);
         }
 
         if (containsContent("treasure")) {
-            addTreasure(new Treasure());
             addToLayout("TT");
         }
 
@@ -86,7 +99,8 @@ public class DefaultChamber extends Chamber {
         }
     }
 
-    private void addToLayout(String code) {
+    public int addToLayout(String code, int... givenType) {
+        int validCell;
         int r;
         int c;
 
@@ -95,12 +109,19 @@ public class DefaultChamber extends Chamber {
             c = rand.nextInt(width);
         } while (!validPlacement(r, c));
 
+        validCell = (r * 8) + c;
+
+        if (code.equals("TT")) {
+            Treasure treasure = new Treasure();
+            int type = (givenType.length > 0) ? givenType[0] : Die.percentile();
+            treasure.chooseTreasure(type);
+            treasureMap.put(validCell, treasure);
+        }
+
         setCell(r, c, code);
+        return validCell;
     }
 
-    protected boolean containsContent(String item) {
-        return contents.getDescription().toLowerCase().contains(item);
-    }
 
     boolean validPlacement(int r, int c) {
         if (cell(r, c).equals("##")) {
@@ -152,6 +173,10 @@ public class DefaultChamber extends Chamber {
         return height;   
     }
 
+    public void setLayout(String[] newLayout) {
+        layout = newLayout;
+    }
+
     public void setLayout(int i) {
         layout = Layouts.chamber(i);
     }
@@ -163,6 +188,14 @@ public class DefaultChamber extends Chamber {
     @Override
     public ArrayList<Door> getDoors(){
         return new ArrayList<>(doors);
+    }
+
+    public HashMap<Integer, Treasure> getTreasureMap(){
+        return treasureMap;
+    }
+
+    public String getDescription() {
+        return Layouts.getDescription(type);
     }
 
     public int numDoors() {
