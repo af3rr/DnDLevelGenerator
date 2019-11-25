@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap');
+
+.text {
+    -fx-font-size: 10px;
+    -fx-fill: #4f4a4b;
+    -fx-font-family: 'Press Start 2P';
+}
+
+.button {
+    -fx-border-style: none;
+    -fx-border-width: 0;
+    -fx-border-insets: 0;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+}
+
+.edit_box {
+    -fx-padding: 50 50 0 0;
+}
+
+.edit_box {
+    -fx-padding: 50 50 0 0;
+    -fx-background-color: #d0c4ac;
+}
+
+.root { 
+    -fx-focus-color: transparent; 
+}
+
+.button.select_button {
+    -fx-background-image: url('../../res/select1.png');
+}
+
+.button.select_button:pressed {
+    -fx-background-image: url('../../res/select2.png');
+}
+
+.combo-box {
+    -fx-pref-width: 200;
+    -fx-pref-height: 50;
+    -fx-fill: #d0c4ac;
+    -fx-background-color: #4f4a4b;
+}
+
+.combo-box .text {
+    -fx-fill: #d0c4ac;
+}
+
+.combo-box-popup {
+    -fx-background-color: #716f71;
+}
+
+.combo-box-popup .text {
+    -fx-background-color: #716f71;
+    -fx-fill: #4f4a4b;
+}
+
+.combo-box-popup .list-cell {
+    -fx-padding: 4 0 4 5;
+
+    /* No alternate highlighting */
+    -fx-background-color: d0c4ac;
+}

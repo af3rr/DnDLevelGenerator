@@ -1,8 +1,7 @@
-
 @import url('https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap');
 
-.toggle-button .text {
-    -fx-font-size: 16px;
+.text {
+    -fx-font-size: 10px;
     -fx-fill: #4f4a4b;
     -fx-font-family: 'Press Start 2P';
 }
@@ -10,6 +9,21 @@
 .root { 
     -fx-focus-color: transparent; 
 }
+
+.button {
+    -fx-border-style: none;
+    -fx-border-width: 0;
+    -fx-border-insets: 0;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+}
+
+
+.button.edit_button {
+    -fx-padding: 50 20 100 0;
+    -fx-background-image: url('../../res/edit.png');
+}
+
 
 .toggle-button {
     -fx-border-style: none;
@@ -19,13 +33,54 @@
     -fx-background-repeat: no-repeat;
 }
 
-.toggle-button:hover {
-    cursor: pointer;
+.toggle-button:hover .button:hover {
+    -fx-cursor: hand;
 }
 
-.toggle-button.chamber_button .text {
+.space-menu {
+    -fx-padding: 50 0 50 45;
+    -fx-background-color: #d0c4ac;
+}
+
+.space_title {
+    -fx-padding: 0 0 0 40;
+}
+
+.space_desc {
+    -fx-padding: 0 0 30 40;
+}
+
+.space_title .text {
     -fx-font-size: 16px;
 }
+
+.space_desc .text {
+    -fx-font-size: 10px;
+    -fx-fill: #6f6f77;
+}
+
+
+
+.door-menu {
+    -fx-padding: 50 20 50 0;
+    -fx-background-color: #d0c4ac;
+}
+.tooltip .text {
+    -fx-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-family: 'Press Start 2P';
+}
+
+.tooltip {
+    -fx-show-delay: 0ms;
+    -fx-background-color: #4f4a4b;
+}
+
+.button.door_button {
+    -fx-padding: 5 0 0 0;
+}
+
+
 
 .toggle-button.chamber_button {
     -fx-padding: 0 0 5 0;
@@ -35,11 +90,6 @@
 .toggle-button.chamber_button:selected {
     -fx-padding: 0 0 0 0;
     -fx-background-image: url('../../res/chamber_button2.png');
-}
-
-
-.toggle-button.passage_button .text {
-    -fx-font-size: 14px;
 }
 
 .toggle-button.passage_button {
@@ -52,7 +102,41 @@
     -fx-background-image: url('../../res/passage_button2.png');
 }
 
-.menu {
-    -fx-padding: 75 0 50 45;
-    -fx-background-color: #d0c4ac;
+
+
+.toggle-button.chamber_button .text {
+    -fx-font-size: 16px;
+}
+
+.toggle-button.passage_button .text {
+    -fx-font-size: 14px;
+}
+
+
+
+.menu-bar { /* The menu bar itself */
+    -fx-background-color: #a2998f;
+}
+
+.menu { /* The File menu item */
+    -fx-padding: 1 5 1 5;
+    -fx-background-color: #a2998f;
+}
+
+.menu:showing { /* The File menu item */
+    -fx-background-color: #716f71;
+}
+
+.menu-item {
+    -fx-padding: 1 5 5 5;
+    -fx-background-color: #716f71;
+}
+
+.menu-item:hover {
+    -fx-background-color: #a2998f;
+}
+
+.context-menu {
+    -fx-background-color: #716f71;
+    -fx-text-fill: white;
 }

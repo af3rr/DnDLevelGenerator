@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap');
+
+.text {
+    -fx-font-size: 10px;
+    -fx-fill: #4f4a4b;
+    -fx-font-family: 'Press Start 2P';
+}
+
+.root { 
+    -fx-focus-color: transparent; 
+}
+
+VBox {
+    -fx-padding: 30 20 20 20;
+    -fx-background-color: #a2998f;
+}
+
+.text-field {
+    -fx-font-size: 12px;
+    -fx-font-family: 'Press Start 2P';
+    -fx-border-style: none;
+    -fx-border-width: 0;
+    -fx-border-insets: 0;
+    -fx-padding: 10 0 10 0;
+    -fx-background-color: #716f71;
+}
+
+.button {
+    -fx-border-style: none;
+    -fx-border-width: 0;
+    -fx-border-insets: 0;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+}
+
+.button {
+    -fx-padding: 0 0 8 0;
+    -fx-background-image: url('../../res/button1.png');
+}
+
+.button:pressed {
+    -fx-padding: 0 0 2 0;
+    -fx-background-image: url('../../res/button2.png');
+}
