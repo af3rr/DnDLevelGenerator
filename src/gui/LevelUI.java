@@ -54,7 +54,7 @@ public class LevelUI<toReturn> extends Application {
         root = new VBox();
 
         initializeUI();
-        scene = new Scene(root, 1350, 768);
+        scene = new Scene(root, 1351, 768);
         scene.getStylesheets().add(getClass().getResource("buttons.css").toExternalForm());
 
         primaryStage = assignedStage;
