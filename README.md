@@ -1,14 +1,12 @@
-Alvin Ferron
-aferron@uoguelph.ca
-1058100
+# D&D Level Generator
 
----
-Bonus Marks:
- - (30 marks) When a chamber or passage is selected from the main window a graphical rendering of the chamber is displayed in addition to the textual descripton
- - (20 marks) The list of Monsters available for editing is pulled from a database connection instead of from the dnd jar files.
- - (10 marks) CSS style sheets are used to control the look and feel of the UI
+The D&D Level Generator provides a convenient way for Dungeon Masters to create graphical representations of a level complete with chambers, massages, monsters and treasure.
 
-Note: my door descriptions are displayed as Tooltips and they take a second to appear.
+#### Functionality
+ - Randomly generates a Level with for the game Dungeons & Dragons
+ - Add/remove custom monsters and treasure to Chambers and Passages
+ - Save and load levels
+<div style="text-align:center"> ![Alt Text](https://media.giphy.com/media/lqS2TfTmdUHNH8FBqU/giphy.gif) </div>
 
 ---
 Game art recreated from the app [Into the Dim](https://apps.apple.com/ca/app/into-the-dim/id1045102110)
