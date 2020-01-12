@@ -125,13 +125,13 @@
     </jar>
   </target>
 
-  <target name="runme" depends="archive"
+  <target name="run" depends="archive"
         description="Run Jar file">
    <java jar="dist/${jar_file}" fork="true">
    </java>  
   </target>
 
-  <target name="runmeJava" depends="copy,compile" description="Run Jar file">
+  <target name="runJava" depends="copy,compile" description="Run Jar file">
    <java classpath="${build}:${javafxlib}" classname="${main_class}" fork="true">
     <classpath refid="libs.jars"/>
    </java>  
