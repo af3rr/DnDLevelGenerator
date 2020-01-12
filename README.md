@@ -6,7 +6,8 @@ The D&D Level Generator provides a convenient way for Dungeon Masters to create 
  - Randomly generates a Level with for the game Dungeons & Dragons
  - Add/remove custom monsters and treasure to Chambers and Passages
  - Save and load levels
-<div style="text-align:center"> ![Alt Text](https://media.giphy.com/media/lqS2TfTmdUHNH8FBqU/giphy.gif) </div>
+
+![Alt Text](https://media.giphy.com/media/lqS2TfTmdUHNH8FBqU/giphy.gif)
 
 ---
 Game art recreated from the app [Into the Dim](https://apps.apple.com/ca/app/into-the-dim/id1045102110)
