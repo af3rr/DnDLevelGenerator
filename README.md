@@ -8,9 +8,9 @@ A desktop application created with the JavaFX platform. The D&D Level Generator 
  - Randomly generates a Level with for the game Dungeons & Dragons
  - Add/remove custom monsters and treasure to Chambers and Passages
  - Save and load levels
-
+<br>
 <p align="center">
-<img src="https://media.giphy.com/media/lqS2TfTmdUHNH8FBqU/giphy.gif">
+<img src="https://user-images.githubusercontent.com/45947696/80554812-50b27e80-899c-11ea-8d1e-e68baef11148.gif">
 </p>
 
 ---
