@@ -1,16 +1,24 @@
 # D&D Level Generator
-### CIS 2430 Assignments 1-4 
+*Submitted to CIS 2430*
+
+
+A desktop application created with the JavaFX platform. The D&D Level Generator provides a convenient way for Dungeon Masters to create graphical representations of a level complete with chambers, passages, monsters and treasure.
+
 <br>
 
-A desktop application created with the JavaFX platform. The D&D Level Generator provides a convenient way for Dungeon Masters to create graphical representations of a level complete with chambers, massages, monsters and treasure.
-
-#### Functionality
- - Randomly generates a Level with for the game Dungeons & Dragons
+## Functionality
+ - Randomly generates a level for the game Dungeons & Dragons
  - Add/remove custom monsters and treasure to Chambers and Passages
  - Save and load levels
+
 <br>
+
+## Screenshots
+
+<br>
+
 <p align="center">
-<img src="https://user-images.githubusercontent.com/45947696/80554812-50b27e80-899c-11ea-8d1e-e68baef11148.gif">
+<img src="https://user-images.githubusercontent.com/45947696/83806281-47918d00-a67f-11ea-8446-337c8a3a3913.gif">
 </p>
 
 ---
